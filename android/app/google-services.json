@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "630485252696",
+    "project_id": "chatapp-zuhdipati",
+    "storage_bucket": "chatapp-zuhdipati.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630485252696:android:ac953b0145df5d6a82a82d",
+        "android_client_info": {
+          "package_name": "com.chatapp.zuhdipati"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630485252696-7cjduqa5udmj2ehktucse8quuje7oija.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chatapp.zuhdipati",
+            "certificate_hash": "fd0c2ebd784bdbe8323180ebd0f6cc5480fc0ab7"
+          }
+        },
+        {
+          "client_id": "630485252696-rmau21lt4b1p3c040gbfl84i9uud6ef0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGyKFQI8PdVILQ3C0xesC6rFH4x6nfsEk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630485252696-rmau21lt4b1p3c040gbfl84i9uud6ef0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "630485252696-nqat894ijujkigaipl5jokesh58sgs7o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chatapp.zuhdipati"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
