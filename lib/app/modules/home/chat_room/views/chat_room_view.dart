@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:chatapp/app/controllers/main_controller.dart';
-import 'package:chatapp/app/widgets/reactions/chat_reactions.dart';
-import 'package:chatapp/app/widgets/reactions/hero_dialog_route.dart';
 import 'package:chatapp/app/widgets/reactions/stacked_reactions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../controllers/chat_room_controller.dart';
 
@@ -15,34 +16,58 @@ class ChatRoomView extends GetView<ChatRoomController> {
   Widget build(BuildContext context) {
     var mainC = MainController.to;
     var chatId = Get.arguments["chat_id"];
+    var friendEmail = Get.arguments["friend_email"];
     return Scaffold(
         appBar: AppBar(
-          leadingWidth: 40,
-          centerTitle: false,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 5),
-            child: IconButton(
-                highlightColor: Colors.transparent,
-                onPressed: Get.back,
-                icon: Icon(Icons.arrow_back_ios_new)),
-          ),
-          title: Row(
-            children: [
-              CircleAvatar(),
-              SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Nama Orang', style: TextStyle(fontSize: 17)),
-                  const Text(
-                    'Status',
-                    style: TextStyle(fontSize: 12),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+            leadingWidth: 40,
+            centerTitle: false,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: IconButton(
+                  highlightColor: Colors.transparent,
+                  onPressed: Get.back,
+                  icon: Icon(Icons.arrow_back_ios_new)),
+            ),
+            title: StreamBuilder(
+              stream: controller.streamProfileFriend(friendEmail),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.active) {
+                  var data = snapshot.data!;
+                  return Row(
+                    children: [
+                      CircleAvatar(
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(200),
+                            child: Visibility(
+                              visible: data["photoUrl"] != null,
+                              replacement:
+                                  Image.asset('assets/logo/noimage.png'),
+                              child: Image.network(
+                                data["photoUrl"],
+                                fit: BoxFit.cover,
+                              ),
+                            )),
+                      ),
+                      SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(data["name"], style: TextStyle(fontSize: 17)),
+                          Visibility(
+                            visible: data["status"] != "",
+                            child: Text(
+                              data["status"],
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  );
+                }
+                return Container();
+              },
+            )),
         body: Column(
           children: [
             Expanded(
@@ -51,48 +76,59 @@ class ChatRoomView extends GetView<ChatRoomController> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.active) {
                   var allData = snapshot.data?.docs;
+                  Timer(
+                    Duration(seconds: 0),
+                    () {
+                      controller.scrollC.animateTo(
+                          controller.scrollC.position.maxScrollExtent,
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeIn);
+                    },
+                  );
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: ListView.builder(
+                      controller: controller.scrollC,
                       itemCount: allData?.length,
                       itemBuilder: (context, index) {
-                        return GestureDetector(
-                            onLongPress: () {
-                              Navigator.of(context).push(
-                                HeroDialogRoute(
-                                  builder: (context) {
-                                    return ReactionsChatWidget(
-                                      id: allData?[index].id ?? "0",
-                                      messageWidget: BubleChat(
-                                        isSender: allData?[index]["pengirim"] ==
-                                                mainC.currentUser?.email
-                                            ? true
-                                            : false,
-                                        message: allData?[index]["message"],
-                                      ),
-                                      menuItemsWidth: 0.6,
-                                      reactions: controller.reactions,
-                                      onReactionTap: (reaction) {
-                                        debugPrint('reaction: $reaction');
-                                        controller.chatReactions.add(reaction);
-                                      },
-                                      onContextMenuTap: (menuItem) {
-                                        debugPrint('menu item: $menuItem');
-                                      },
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            child: Hero(
-                                tag: allData?[index].id ?? "0",
-                                child: BubleChat(
-                                  isSender: allData?[index]["pengirim"] ==
-                                          mainC.currentUser?.email
-                                      ? true
-                                      : false,
-                                  message: allData?[index]["message"],
-                                )));
+                        return Column(
+                          crossAxisAlignment: allData?[index]["pengirim"] ==
+                                  mainC.currentUser?.email
+                              ? CrossAxisAlignment.end
+                              : CrossAxisAlignment.start,
+                          children: [
+                            Visibility(
+                                visible: index == 0 ||
+                                    allData?[index]['group_time'] !=
+                                        allData?[index - 1]['group_time'],
+                                child: Center(
+                                    child:
+                                        Text(allData?[index]['group_time']))),
+                            GestureDetector(
+                                onLongPress: () {
+                                  controller.onTapBubleChat(
+                                      allData,
+                                      allData?[index]['reactions'].cast<String>(),
+                                      index,
+                                      allData![index].id,
+                                      Get.arguments["chat_id"]);
+                                },
+                                child: Hero(
+                                    tag: allData?[index].id ?? "0",
+                                    child: BubleChat(
+                                      isSender: allData?[index]["pengirim"] ==
+                                              mainC.currentUser?.email
+                                          ? true
+                                          : false,
+                                      message: allData?[index]["message"],
+                                      time: DateFormat('hh.mm a').format(
+                                          DateTime.parse(
+                                              allData?[index]["time"])),
+                                      reactions: allData?[index]['reactions'].cast<String>(),
+                                    )))
+                          ],
+                        );
                       },
                     ),
                   );
@@ -113,7 +149,7 @@ class ChatRoomView extends GetView<ChatRoomController> {
                   SizedBox(width: 10),
                   Expanded(
                       child: TextField(
-                    controller: controller.chatController,
+                    controller: controller.chatC,
                     decoration: InputDecoration(
                         hintText: 'New Chat',
                         hintStyle: TextStyle(color: Colors.grey),
@@ -128,10 +164,8 @@ class ChatRoomView extends GetView<ChatRoomController> {
                   IconButton(
                     icon: Icon(Icons.send),
                     onPressed: () {
-                      controller.newChat(
-                          Get.arguments,
-                          mainC.currentUser!.email,
-                          controller.chatController.text);
+                      controller.newChat(Get.arguments,
+                          mainC.currentUser!.email, controller.chatC.text);
                     },
                   )
                 ],
@@ -147,10 +181,14 @@ class BubleChat extends GetView<ChatRoomController> {
     super.key,
     required this.isSender,
     required this.message,
+    required this.reactions,
+    this.time,
   });
 
   final bool isSender;
   final String message;
+  final List<String> reactions;
+  final String? time;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +205,9 @@ class BubleChat extends GetView<ChatRoomController> {
             Stack(
               children: [
                 Column(
+                  crossAxisAlignment: isSender
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
                   children: [
                     Container(
                       constraints: BoxConstraints(maxWidth: maxWidth),
@@ -192,15 +233,23 @@ class BubleChat extends GetView<ChatRoomController> {
                             decoration: TextDecoration.none),
                       ),
                     ),
-                    SizedBox(height: 10)
+                    Text(
+                      time ?? '',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          decoration: TextDecoration.none),
+                    ),
+                    SizedBox(height: 5)
                   ],
                 ),
                 Positioned(
-                  bottom: 0,
-                  right: 20,
+                  bottom: 20,
+                  right: 0,
                   child: StackedReactions(
                     size: 15,
-                    reactions: controller.chatReactions,
+                    reactions: [],
                   ),
                 )
               ],

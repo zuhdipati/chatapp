@@ -1,6 +1,11 @@
+import 'package:chatapp/app/controllers/main_controller.dart';
+import 'package:chatapp/app/modules/home/chat_room/views/chat_room_view.dart';
+import 'package:chatapp/app/widgets/reactions/chat_reactions.dart';
+import 'package:chatapp/app/widgets/reactions/hero_dialog_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class ChatRoomController extends GetxController {
   var firestore = FirebaseFirestore.instance;
@@ -8,84 +13,147 @@ class ChatRoomController extends GetxController {
   RxInt totalUnread = 0.obs;
   List<String> chatReactions = [];
   List<String> reactions = ['👍', '❤️', '😂', '😮', '😢', '😠'];
-  TextEditingController chatController = TextEditingController();
+  TextEditingController chatC = TextEditingController();
+  ScrollController scrollC = ScrollController();
 
   Stream<QuerySnapshot<Map<String, dynamic>>> streamChats(String chatId) {
     return firestore
         .collection('chats')
         .doc(chatId)
         .collection('chat')
-        .orderBy('time')
+        .orderBy('time', descending: false)
         .snapshots();
+  }
+
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamProfileFriend(
+      String friendEmail) {
+    return firestore.collection('users').doc(friendEmail).snapshots();
   }
 
   void newChat(
       Map<String, dynamic> arguments, String email, String chat) async {
-    var chats = firestore.collection('chats');
-    var users = firestore.collection('users');
-    var date = DateTime.now().toString();
+    if (chat.isNotEmpty) {
+      var chats = firestore.collection('chats');
+      var users = firestore.collection('users');
+      var date = DateTime.now().toString();
 
-     await chats.doc(arguments["chat_id"]).collection("chat").add({
-      "pengirim": email,
-      "penerima": arguments["friend_email"],
-      "message": chat,
-      "time": date,
-      "is_read": false,
-    });
+      await chats.doc(arguments["chat_id"]).collection("chat").add({
+        "pengirim": email,
+        "penerima": arguments["friend_email"],
+        "message": chat,
+        "time": date,
+        "is_read": false,
+        "group_time": DateFormat.yMMMd('en_US').format(DateTime.parse(date)),
+        "reactions": []
+      });
 
-    await users
-        .doc(email)
-        .collection('chats')
-        .doc(arguments["chat_id"])
-        .update({
-      "last_time": date,
-    });
-
-    var checkChatsFriend = await users
-        .doc(arguments["friend_email"])
-        .collection('chats')
-        .doc(arguments["chat_id"])
-        .get();
-
-    if (checkChatsFriend.exists) {
-      // cek total unread friend..
-      var checkTotalUnread = await chats
-          .doc(arguments["chat_id"])
-          .collection('chat')
-          .where("is_read", isEqualTo: false)
-          .where("pengirim", isEqualTo: email)
-          .get();
-
-      totalUnread.value = checkTotalUnread.docs.length;
-
-      // await users
-      //     .doc(arguments["friend_email"])
-      //     .collection('chats')
-      //     .doc(arguments["chat_id"])
-      //     .get()
-      //     .then(
-      //       (value) =>
-      //           totalUnread.value = (value.data()?["total_unread"] as int) + 1,
-      //     );
+      chatC.clear();
+      scrollC.animateTo(scrollC.position.maxScrollExtent,
+          duration: Duration(milliseconds: 100), curve: Curves.easeIn);
 
       await users
-          .doc(arguments["friend_email"])
+          .doc(email)
           .collection('chats')
           .doc(arguments["chat_id"])
           .update({
         "last_time": date,
-        "total_unread": totalUnread.value,
       });
-    } else {
-      await users
+
+      var checkChatsFriend = await users
           .doc(arguments["friend_email"])
           .collection('chats')
           .doc(arguments["chat_id"])
-          .set({
-        "connection": email,
-        "last_time": date,
-        "total_unread": totalUnread.value + 1
-      });
+          .get();
+
+      // jika friend sudah pernah dichat..
+      if (checkChatsFriend.exists) {
+        var checkTotalUnread = await chats
+            .doc(arguments["chat_id"])
+            .collection('chat')
+            .where("is_read", isEqualTo: false)
+            .where("pengirim", isEqualTo: email)
+            .get();
+
+        totalUnread.value = checkTotalUnread.docs.length;
+
+        await users
+            .doc(arguments["friend_email"])
+            .collection('chats')
+            .doc(arguments["chat_id"])
+            .update({
+          "last_time": date,
+          "total_unread": totalUnread.value,
+        });
+      } else {
+        // jika friend belum pernah dichat..
+        await users
+            .doc(arguments["friend_email"])
+            .collection('chats')
+            .doc(arguments["chat_id"])
+            .set({
+          "connection": email,
+          "last_time": date,
+          "total_unread": totalUnread.value + 1
+        });
+      }
+      chatC.clear();
     }
+  }
+
+  void onTapBubleChat(
+      List<QueryDocumentSnapshot<Map<String, dynamic>>>? allData,
+      List<String> reactions,
+      int index,
+      String idBubleChat,
+      String chatId) {
+    var mainC = MainController.to;
+    var chats = FirebaseFirestore.instance.collection('chats');
+    print(chatId);
+    print(idBubleChat);
+
+    Navigator.of(Get.context!).push(
+      HeroDialogRoute(
+        builder: (context) {
+          return ReactionsChatWidget(
+            id: allData?[index].id ?? "0",
+            messageWidget: BubleChat(
+              isSender: allData?[index]["pengirim"] == mainC.currentUser?.email
+                  ? true
+                  : false,
+              message: allData?[index]["message"],
+              reactions: reactions,
+            ),
+            menuItemsWidth: 0.6,
+            reactions: reactions,
+            onReactionTap: (reaction) async {
+              debugPrint('reaction: $reaction');
+              var docChat = await chats
+                  .doc(chatId)
+                  .collection('chat')
+                  .doc(idBubleChat)
+                  .get();
+
+              chatReactions = docChat.data()?['reactions'].cast<String>();
+              chatReactions.add(reaction);
+              await chats
+                  .doc(chatId)
+                  .collection('chat')
+                  .doc(idBubleChat)
+                  .update({"reactions": chatReactions});
+            },
+            onContextMenuTap: (menuItem) {
+              debugPrint('menu item: $menuItem');
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  @override
+  void onClose() {
+    chatC.dispose();
+    scrollC.dispose();
+    super.onClose();
   }
 }

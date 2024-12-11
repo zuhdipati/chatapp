@@ -5,6 +5,7 @@ import 'package:chatapp/app/modules/home/views/home_view.dart';
 import 'package:chatapp/app/modules/profile/views/profile_view.dart';
 import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:chatapp/app/services/utils.dart';
+import 'package:chatapp/app/widgets/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -94,10 +95,12 @@ class MainController extends GetxController {
   }
 
   void login() async {
+    showLoading();
     try {
       await googleSignIn.signOut();
 
       currentUser = await googleSignIn.signIn();
+      
 
       final isSignIn = await googleSignIn.isSignedIn();
       if (isSignIn) {
@@ -137,10 +140,12 @@ class MainController extends GetxController {
         }
 
         checkAndFetchUser();
+        hideLoading();
 
         Utils.setSkipIntro(skip: true);
         Get.offAllNamed(Routes.main);
       } else {
+        hideLoading();
         log("GAGAL LOGIN");
       }
     } catch (error) {

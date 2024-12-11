@@ -1,8 +1,6 @@
 import 'package:chatapp/app/controllers/main_controller.dart';
-import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:chatapp/app/widgets/user_list_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -20,16 +18,6 @@ class HomeView extends GetView<HomeController> {
             'Mengobrol',
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
-          actions: [
-            Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: IconButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.search);
-                  },
-                  icon: Icon(CupertinoIcons.search, size: 25),
-                )),
-          ],
           centerTitle: false,
         ),
         body: SingleChildScrollView(
@@ -133,7 +121,7 @@ class HomeView extends GetView<HomeController> {
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
+                                          horizontal: 15, vertical: 5),
                                       child: UserListWidget(
                                         name: data!['name'],
                                         imageUrl: data["photoUrl"],

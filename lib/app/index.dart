@@ -1,6 +1,6 @@
 import 'package:chatapp/app/controllers/main_controller.dart';
+import 'package:chatapp/app/routes/app_pages.dart';
 import 'package:chatapp/app/services/assets.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -55,46 +55,47 @@ class MainNavigation extends StatelessWidget {
                           backgroundColor: Colors.black,
                           foregroundColor: Colors.white),
                       onPressed: () {
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) {
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CupertinoActionSheet(
-                                  title: const Text('Title'),
-                                  message: const Text('Message'),
-                                  actions: <CupertinoActionSheetAction>[
-                                    CupertinoActionSheetAction(
-                                      child: const Text('Action One'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                    CupertinoActionSheetAction(
-                                      child: const Text('Action Two'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Container(
-                                  height: 50,
-                                  width: Get.width * 0.44,
-                                  margin: EdgeInsets.only(bottom: 45),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  child: ElevatedButton(
-                                    onPressed: Get.back,
-                                    child: Text("Cancel"),
-                                  ),
-                                )
-                              ],
-                            );
-                          },
-                        );
+                        Get.toNamed(Routes.search);
+                        // showCupertinoModalPopup(
+                        //   context: context,
+                        //   builder: (context) {
+                        //     return Column(
+                        //       mainAxisAlignment: MainAxisAlignment.end,
+                        //       crossAxisAlignment: CrossAxisAlignment.center,
+                        //       children: [
+                        //         CupertinoActionSheet(
+                        //           title: const Text('Title'),
+                        //           message: const Text('Message'),
+                        //           actions: <CupertinoActionSheetAction>[
+                        //             CupertinoActionSheetAction(
+                        //               child: const Text('Action One'),
+                        //               onPressed: () {
+                        //                 Navigator.pop(context);
+                        //               },
+                        //             ),
+                        //             CupertinoActionSheetAction(
+                        //               child: const Text('Action Two'),
+                        //               onPressed: () {
+                        //                 Navigator.pop(context);
+                        //               },
+                        //             ),
+                        //           ],
+                        //         ),
+                        //         Container(
+                        //           height: 50,
+                        //           width: Get.width * 0.44,
+                        //           margin: EdgeInsets.only(bottom: 45),
+                        //           padding: const EdgeInsets.symmetric(
+                        //               horizontal: 15),
+                        //           child: ElevatedButton(
+                        //             onPressed: Get.back,
+                        //             child: Text("Cancel"),
+                        //           ),
+                        //         )
+                        //       ],
+                        //     );
+                        //   },
+                        // );
                       },
                       child: Row(
                         children: [

@@ -14,7 +14,7 @@ class SearchView extends GetView<AddFriendController> {
     final mainC = MainController.to;
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Cari Orang'),
+          title: const Text('Search New Chat'),
           centerTitle: true,
         ),
         body: Column(
