@@ -21,40 +21,40 @@ class ProfileView extends GetView<ProfileController> {
             icon: Icon(Icons.logout_outlined),
           ),
         ]),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Column(
-              children: [
-                SizedBox(height: 30),
-                AvatarGlow(
-                  startDelay: const Duration(milliseconds: 1000),
-                  glowColor: Colors.black,
-                  glowRadiusFactor: 0.13,
-                  glowShape: BoxShape.circle,
-                  curve: Curves.fastOutSlowIn,
-                  child: SizedBox(
-                      width: 175,
-                      height: 175,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(200),
-                          child: mainC.userData.value.photoUrl == "noImage"
-                              ? Image.asset('assets/logo/noimage.png')
-                              : Obx(() => Image.network(
-                                  mainC.userData.value.photoUrl ?? '')))),
-                ),
-                SizedBox(height: 15),
-                Obx(() => Text(mainC.userData.value.name ?? '',
-                    style:
-                        TextStyle(fontSize: 22, fontWeight: FontWeight.w600))),
-                Text(mainC.userData.value.email ?? '',
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              ],
-            ),
-            SizedBox(height: 30),
-            Expanded(
-              child: Column(
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  SizedBox(height: 30),
+                  AvatarGlow(
+                    startDelay: const Duration(milliseconds: 1000),
+                    glowColor: Colors.black,
+                    glowRadiusFactor: 0.13,
+                    glowShape: BoxShape.circle,
+                    curve: Curves.fastOutSlowIn,
+                    child: SizedBox(
+                        width: 175,
+                        height: 175,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(200),
+                            child: mainC.userData.value.photoUrl == "noImage"
+                                ? Image.asset('assets/logo/noimage.png')
+                                : Obx(() => Image.network(
+                                    mainC.userData.value.photoUrl ?? '')))),
+                  ),
+                  SizedBox(height: 25),
+                  Obx(() => Text(mainC.userData.value.name ?? '',
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600))),
+                  Text(mainC.userData.value.email ?? '',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                ],
+              ),
+              SizedBox(height: 50),
+              Column(
                 children: [
                   ListTile(
                     onTap: () => Get.toNamed(Routes.updateStatus),
@@ -76,17 +76,8 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 30),
-              child: Column(
-                children: [
-                  Text("Chat App"),
-                  Text("v.1.0"),
-                ],
-              ),
-            )
-          ],
+            ],
+          ),
         ));
   }
 }

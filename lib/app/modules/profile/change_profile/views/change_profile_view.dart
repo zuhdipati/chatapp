@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:chatapp/app/controllers/main_controller.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
           padding: const EdgeInsets.all(20),
           child: ListView(
             children: [
+              SizedBox(height: 30),
               AvatarGlow(
                 startDelay: const Duration(milliseconds: 1000),
                 glowColor: Colors.black,
@@ -30,21 +33,69 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                 glowShape: BoxShape.circle,
                 curve: Curves.fastOutSlowIn,
                 child: SizedBox(
-                    width: 175,
-                    height: 175,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: mainC.userData.value.photoUrl == "noImage"
-                                  ? AssetImage('assets/logo/noimage.png')
-                                  : NetworkImage(
-                                      mainC.userData.value.photoUrl ?? ''))),
-                    )),
+                  height: 175,
+                  child: Obx(() => Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 90,
+                                  backgroundImage: controller
+                                          .pickedImage.value.path.isNotEmpty
+                                      ? FileImage(
+                                          File(controller
+                                              .pickedImage.value.path),
+                                        )
+                                      : mainC.userData.value.photoUrl ==
+                                              "noImage"
+                                          ? AssetImage(
+                                              'assets/logo/noimage.png')
+                                          : NetworkImage(
+                                              mainC.userData.value.photoUrl ??
+                                                  ''),
+                                ),
+                                Visibility(
+                                  visible: controller
+                                      .pickedImage.value.path.isNotEmpty,
+                                  child: Positioned(
+                                    top: 10,
+                                    right: 10,
+                                    child: GestureDetector(
+                                      onTap: () => controller.removeImage(),
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.red),
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
               ),
-              SizedBox(height: 15),
-              TextButton(
-                  onPressed: () {}, child: Text("Change profile picture")),
+              SizedBox(height: 20),
+              GestureDetector(
+                  onTap: () => controller.pickPicture(),
+                  child: Center(
+                      child: Text(
+                    "Change profile picture",
+                    style: TextStyle(color: Colors.deepPurple),
+                  ))),
               SizedBox(height: 15),
               TextField(
                 controller: controller.emailController,
@@ -90,6 +141,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12))),
                       onPressed: () {
+                        
                         controller.updateProfile(controller.nameController.text,
                             controller.statusController.text);
                       },

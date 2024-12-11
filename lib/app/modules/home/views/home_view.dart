@@ -123,9 +123,9 @@ class HomeView extends GetView<HomeController> {
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 15, vertical: 5),
                                       child: UserListWidget(
-                                        name: data!['name'],
-                                        imageUrl: data["photoUrl"],
-                                        subText: data['status'],
+                                        name: data?['name'],
+                                        imageUrl: data?["photoUrl"],
+                                        subText: data?['status'],
                                         incomingChat:
                                             "${allChats?[index]["total_unread"]}",
                                         time:

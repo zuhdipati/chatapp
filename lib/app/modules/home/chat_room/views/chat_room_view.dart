@@ -233,6 +233,7 @@ class BubleChat extends GetView<ChatRoomController> {
                             decoration: TextDecoration.none),
                       ),
                     ),
+                    SizedBox(height: 5),
                     Text(
                       time ?? '',
                       style: TextStyle(
@@ -249,7 +250,7 @@ class BubleChat extends GetView<ChatRoomController> {
                   right: 0,
                   child: StackedReactions(
                     size: 15,
-                    reactions: [],
+                    reactions: reactions,
                   ),
                 )
               ],

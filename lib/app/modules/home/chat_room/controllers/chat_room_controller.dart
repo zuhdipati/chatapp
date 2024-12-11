@@ -11,8 +11,8 @@ class ChatRoomController extends GetxController {
   var firestore = FirebaseFirestore.instance;
 
   RxInt totalUnread = 0.obs;
-  List<String> chatReactions = [];
-  List<String> reactions = ['👍', '❤️', '😂', '😮', '😢', '😠'];
+  List<dynamic> chatReactions = [];
+  List<String> listReactions = ['👍', '❤️', '😂', '😮', '😢', '😠'];
   TextEditingController chatC = TextEditingController();
   ScrollController scrollC = ScrollController();
 
@@ -104,12 +104,10 @@ class ChatRoomController extends GetxController {
       List<QueryDocumentSnapshot<Map<String, dynamic>>>? allData,
       List<String> reactions,
       int index,
-      String idBubleChat,
+      String bubleChatId,
       String chatId) {
     var mainC = MainController.to;
     var chats = FirebaseFirestore.instance.collection('chats');
-    print(chatId);
-    print(idBubleChat);
 
     Navigator.of(Get.context!).push(
       HeroDialogRoute(
@@ -124,21 +122,21 @@ class ChatRoomController extends GetxController {
               reactions: reactions,
             ),
             menuItemsWidth: 0.6,
-            reactions: reactions,
+            reactions: listReactions,
             onReactionTap: (reaction) async {
               debugPrint('reaction: $reaction');
               var docChat = await chats
                   .doc(chatId)
                   .collection('chat')
-                  .doc(idBubleChat)
+                  .doc(bubleChatId)
                   .get();
 
-              chatReactions = docChat.data()?['reactions'].cast<String>();
+              chatReactions = docChat.data()?['reactions'];
               chatReactions.add(reaction);
               await chats
                   .doc(chatId)
                   .collection('chat')
-                  .doc(idBubleChat)
+                  .doc(bubleChatId)
                   .update({"reactions": chatReactions});
             },
             onContextMenuTap: (menuItem) {
