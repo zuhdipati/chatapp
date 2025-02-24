@@ -12,4 +12,4 @@ Aplikasi chat real-time yang dibangun dengan Flutter, menggunakan GetX untuk sta
 - Flutter: Framework untuk membangun UI yang responsif dan cepat.
 - GetX: State management yang ringan dan mudah digunakan untuk mengelola status aplikasi dan navigasi.
 - Firebase Firestore: Database NoSQL untuk menyimpan dan mengelola data pengguna dan pesan secara real-time.
-- Firebase Authentication: Otentikasi pengguna dengan email dan password.
+- Firebase Authentication: Otentikasi pengguna dengan Google sign in.
