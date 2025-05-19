@@ -1,16 +1,15 @@
-# chatapp
+# Chat App with Flutter, GetX, and Firebase Firestore
 
-A new Flutter project.
+Aplikasi chat real-time yang dibangun dengan Flutter, menggunakan GetX untuk state management, dan Firebase Firestore sebagai backend untuk menyimpan dan mengelola data chat. Aplikasi ini memungkinkan pengguna untuk berkomunikasi secara langsung melalui fitur chat real-time, mencari pengguna lain, dan mengubah profil mereka kapan saja.
 
-## Getting Started
+## Fitur Utama:
+- Chat Real-Time: Kirim dan terima pesan secara langsung dengan pengguna lain dalam aplikasi.
+- Cari Pengguna: Fitur pencarian untuk menemukan teman atau pengguna lain di aplikasi.
+- Ubah Profil: Pengguna dapat mengubah nama, foto profil, dan informasi lainnya kapan saja.
+- Realtime Updates: Semua perubahan data (pesan, profil) langsung diperbarui secara real-time berkat Firebase Firestore dan GetX.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Stack Teknologi:
+- Flutter: Framework untuk membangun UI yang responsif dan cepat.
+- GetX: State management yang ringan dan mudah digunakan untuk mengelola status aplikasi dan navigasi.
+- Firebase Firestore: Database NoSQL untuk menyimpan dan mengelola data pengguna dan pesan secara real-time.
+- Firebase Authentication: Otentikasi pengguna dengan Google sign in.
