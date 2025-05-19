@@ -44,7 +44,7 @@ dependencies:
   get_storage: ^2.1.1
   flutter_svg: ^2.0.15
   avatar_glow: ^3.0.1
-  cloud_firestore: ^5.5.0
+  cloud_firestore: ^5.6.7
   cached_network_image: ^3.4.1
   animate_do: ^3.3.4
   intl: ^0.20.1
