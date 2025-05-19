@@ -16,6 +16,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class MainController extends GetxController {
   static MainController get to => Get.find();
 
+  RxBool isDarkMode = true.obs;
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   GoogleSignInAccount? currentUser;

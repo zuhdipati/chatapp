@@ -36,7 +36,9 @@ class MainNavigation extends StatelessWidget {
                       navHome,
                       colorFilter: ColorFilter.mode(
                         controller.tabIndex.value == 0
-                            ? Colors.black
+                            ? controller.isDarkMode.value
+                                ? Colors.black
+                                : Colors.white
                             : Colors.grey,
                         BlendMode.srcIn,
                       ),
@@ -56,50 +58,13 @@ class MainNavigation extends StatelessWidget {
                           foregroundColor: Colors.white),
                       onPressed: () {
                         Get.toNamed(Routes.search);
-                        // showCupertinoModalPopup(
-                        //   context: context,
-                        //   builder: (context) {
-                        //     return Column(
-                        //       mainAxisAlignment: MainAxisAlignment.end,
-                        //       crossAxisAlignment: CrossAxisAlignment.center,
-                        //       children: [
-                        //         CupertinoActionSheet(
-                        //           title: const Text('Title'),
-                        //           message: const Text('Message'),
-                        //           actions: <CupertinoActionSheetAction>[
-                        //             CupertinoActionSheetAction(
-                        //               child: const Text('Action One'),
-                        //               onPressed: () {
-                        //                 Navigator.pop(context);
-                        //               },
-                        //             ),
-                        //             CupertinoActionSheetAction(
-                        //               child: const Text('Action Two'),
-                        //               onPressed: () {
-                        //                 Navigator.pop(context);
-                        //               },
-                        //             ),
-                        //           ],
-                        //         ),
-                        //         Container(
-                        //           height: 50,
-                        //           width: Get.width * 0.44,
-                        //           margin: EdgeInsets.only(bottom: 45),
-                        //           padding: const EdgeInsets.symmetric(
-                        //               horizontal: 15),
-                        //           child: ElevatedButton(
-                        //             onPressed: Get.back,
-                        //             child: Text("Cancel"),
-                        //           ),
-                        //         )
-                        //       ],
-                        //     );
-                        //   },
-                        // );
                       },
                       child: Row(
                         children: [
-                          Icon(Icons.add),
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
                           Text("New Chat"),
                         ],
                       )),
@@ -111,9 +76,11 @@ class MainNavigation extends StatelessWidget {
                     icon: SvgPicture.asset(
                       navProfile,
                       colorFilter: ColorFilter.mode(
-                        controller.tabIndex.value == 1
-                            ? Colors.black
-                            : Colors.grey,
+                        controller.tabIndex.value == 0
+                            ? Colors.grey
+                            : controller.isDarkMode.value
+                                ? Colors.black
+                                : Colors.white,
                         BlendMode.srcIn,
                       ),
                     ),

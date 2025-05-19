@@ -94,7 +94,7 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                   child: Center(
                       child: Text(
                     "Change profile picture",
-                    style: TextStyle(color: Colors.deepPurple),
+                    style: TextStyle(),
                   ))),
               SizedBox(height: 15),
               TextField(
@@ -138,10 +138,12 @@ class ChangeProfileView extends GetView<ChangeProfileController> {
                   width: Get.width,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                          foregroundColor: mainC.isDarkMode.value
+                              ? Colors.black
+                              : Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12))),
                       onPressed: () {
-                        
                         controller.updateProfile(controller.nameController.text,
                             controller.statusController.text);
                       },

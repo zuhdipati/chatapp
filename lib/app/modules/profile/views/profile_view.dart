@@ -18,7 +18,7 @@ class ProfileView extends GetView<ProfileController> {
 
     final darkTheme = ThemeData(
       brightness: Brightness.dark,
-      primarySwatch: Colors.blue,
+      primarySwatch: Colors.blueGrey,
     );
     final mainC = MainController.to;
     return Scaffold(
@@ -65,12 +65,12 @@ class ProfileView extends GetView<ProfileController> {
               SizedBox(height: 50),
               Column(
                 children: [
-                  ListTile(
-                    onTap: () => Get.toNamed(Routes.updateStatus),
-                    leading: Icon(Icons.note_add_outlined),
-                    title: Text("Update Status"),
-                    trailing: Icon(Icons.arrow_right),
-                  ),
+                  // ListTile(
+                  //   onTap: () => Get.toNamed(Routes.updateStatus),
+                  //   leading: Icon(Icons.note_add_outlined),
+                  //   title: Text("Update Status"),
+                  //   trailing: Icon(Icons.arrow_right),
+                  // ),
                   ListTile(
                     onTap: () => Get.toNamed(Routes.changeProfile),
                     leading: Icon(Icons.person),
@@ -79,6 +79,7 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   ListTile(
                     onTap: () {
+                      mainC.isDarkMode.value = Get.isDarkMode;
                       Get.changeTheme(Get.isDarkMode ? lightTheme : darkTheme);
                     },
                     leading: Icon(Icons.dark_mode),

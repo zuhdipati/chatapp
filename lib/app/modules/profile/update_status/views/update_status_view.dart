@@ -1,3 +1,4 @@
+import 'package:chatapp/app/controllers/main_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -30,6 +31,9 @@ class UpdateStatusView extends GetView<UpdateStatusController> {
                   width: Get.width,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
+                        foregroundColor: MainController.to.isDarkMode.value
+                              ? Colors.black
+                              : Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))
                       ),
                       onPressed: () {
