@@ -1,6 +1,6 @@
 # Mengobrol - Chat App
 
-Aplikasi chat real-time yang dibangun dengan Flutter, menggunakan GetX untuk state management, dan Firebase Firestore sebagai backend untuk menyimpan dan mengelola data chat. Aplikasi ini memungkinkan pengguna untuk berkomunikasi secara langsung melalui fitur chat real-time, mencari pengguna lain, dan mengubah profil mereka kapan saja.
+Aplikasi chat real-time yang dibangun dengan Flutter, menggunakan GetX untuk state management, dan Firebase Firestore sebagai backend untuk menyimpan dan mengelola data chat. Aplikasi ini memungkinkan pengguna untuk berkomunikasi secara langsung melalui fitur chat real-time, mencari pengguna lain, dan mengubah profil mereka kapan saja. Aplikasi ini bisa diakses menggunakan Android dan IOS
 
 ## Fitur Utama:
 - Chat Real-Time: Kirim dan terima pesan secara langsung dengan pengguna lain dalam aplikasi.
