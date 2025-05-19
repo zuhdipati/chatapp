@@ -150,9 +150,13 @@ class ChatRoomView extends GetView<ChatRoomController> {
                   Expanded(
                       child: TextField(
                     controller: controller.chatC,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
                     decoration: InputDecoration(
                         hintText: 'New Chat',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        // hintStyle: TextStyle(color: Colors.grey),
                         contentPadding: EdgeInsets.symmetric(horizontal: 15),
                         filled: true,
                         fillColor: Colors.grey.shade200,

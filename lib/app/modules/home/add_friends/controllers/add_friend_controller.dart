@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddFriendController extends GetxController {
+  var mainC = MainController.to;
   var firestore = FirebaseFirestore.instance;
+  var date = DateTime.now().toString();
   var firstQuery = [].obs;
   var tempQuery = [].obs;
 
@@ -54,8 +56,6 @@ class AddFriendController extends GetxController {
   }
 
   void addNewConnection(String friendEmail) async {
-    var mainC = MainController.to;
-    var date = DateTime.now().toString();
     var chats = firestore.collection('chats');
     var users = firestore.collection('users');
     String chatId = '';
@@ -122,12 +122,14 @@ class AddFriendController extends GetxController {
 
         mainC.userData.refresh();
       } else {
+        // add field "connections" ke collection chats
         final newChatDoc = await chats.add({
           "connections": [mainC.currentUser!.email, friendEmail],
         });
 
         chats.doc(newChatDoc.id).collection('chat');
 
+        // add collection chats ke collection users
         await users
             .doc(mainC.currentUser!.email)
             .collection('chats')
@@ -138,6 +140,7 @@ class AddFriendController extends GetxController {
           "total_unread": 0,
         });
 
+        // masukkan chat dari collection user ke model UserChat
         final listChat =
             await users.doc(mainC.currentUser?.email).collection('chats').get();
 

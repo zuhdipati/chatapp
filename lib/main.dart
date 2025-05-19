@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
       title: "Chat App",
       initialRoute: Routes.splash,  
       getPages: AppPages.routes,
+      themeMode: ThemeMode.system,
       initialBinding: MainBinding(),
     );
   }

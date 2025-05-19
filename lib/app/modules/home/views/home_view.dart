@@ -112,24 +112,27 @@ class HomeView extends GetView<HomeController> {
                                 if (snapshot2.connectionState ==
                                     ConnectionState.active) {
                                   var data = snapshot2.data?.data();
-                                  return InkWell(
-                                    onTap: () {
-                                      controller.updateReadChat(
-                                        "${allChats?[index].id}",
-                                        allChats?[index]["connection"],
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15, vertical: 5),
-                                      child: UserListWidget(
-                                        name: data?['name'],
-                                        imageUrl: data?["photoUrl"],
-                                        subText: data?['status'],
-                                        incomingChat:
-                                            "${allChats?[index]["total_unread"]}",
-                                        time:
-                                            "${allChats?[index]["last_time"]}",
+                                  return Visibility(
+                                    visible: data != null,
+                                    child: InkWell(
+                                      onTap: () {
+                                        controller.updateReadChat(
+                                          "${allChats?[index].id}",
+                                          allChats?[index]["connection"],
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 5),
+                                        child: UserListWidget(
+                                          name: data?['name'],
+                                          imageUrl: data?["photoUrl"],
+                                          subText: data?['status'],
+                                          incomingChat:
+                                              "${allChats?[index]["total_unread"]}",
+                                          time:
+                                              "${allChats?[index]["last_time"]}",
+                                        ),
                                       ),
                                     ),
                                   );

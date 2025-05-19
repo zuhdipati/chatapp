@@ -11,6 +11,15 @@ class ProfileView extends GetView<ProfileController> {
   const ProfileView({super.key});
   @override
   Widget build(BuildContext context) {
+    final lightTheme = ThemeData(
+      brightness: Brightness.light,
+      primarySwatch: Colors.blue,
+    );
+
+    final darkTheme = ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: Colors.blue,
+    );
     final mainC = MainController.to;
     return Scaffold(
         appBar: AppBar(actions: [
@@ -46,8 +55,8 @@ class ProfileView extends GetView<ProfileController> {
                   ),
                   SizedBox(height: 25),
                   Obx(() => Text(mainC.userData.value.name ?? '',
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.w600))),
+                      style: TextStyle(
+                          fontSize: 22, fontWeight: FontWeight.w600))),
                   Text(mainC.userData.value.email ?? '',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
@@ -69,7 +78,9 @@ class ProfileView extends GetView<ProfileController> {
                     trailing: Icon(Icons.arrow_right),
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Get.changeTheme(Get.isDarkMode ? lightTheme : darkTheme);
+                    },
                     leading: Icon(Icons.dark_mode),
                     title: Text("Change Theme"),
                     trailing: Icon(Icons.dark_mode),
