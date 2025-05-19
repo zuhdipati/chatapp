@@ -23,61 +23,7 @@ class HomeView extends GetView<HomeController> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(12),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                                height: 70,
-                                width: 70,
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.grey.shade100,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Colors.grey,
-                                      size: 30,
-                                    ),
-                                  ),
-                                )),
-                            SizedBox(height: 5),
-                            Text("Your Story")
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 5),
-                      ...List.generate(
-                        7,
-                        (index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(3),
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                    height: 70,
-                                    width: 70,
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.grey.shade100,
-                                    )),
-                                SizedBox(height: 5),
-                                Text("Nama")
-                              ],
-                            ),
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Row(
