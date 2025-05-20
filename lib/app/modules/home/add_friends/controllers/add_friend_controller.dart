@@ -100,10 +100,12 @@ class AddFriendController extends GetxController {
             var dataDocChat = element.data();
             var dataDocChatId = element.id;
             dataListChat.add(ChatUser(
-                connection: dataDocChat["connection"],
-                chatId: dataDocChatId,
-                lastTime: chatData["last_time"],
-                totalUnread: dataDocChat["total_unread"]));
+              connection: dataDocChat["connection"],
+              chatId: dataDocChatId,
+              lastTime: chatData["last_time"],
+              totalUnread: dataDocChat["total_unread"],
+              lastMessage: dataDocChat["last_message"],
+            ));
           }
           mainC.userData.update(
             (val) {
@@ -129,6 +131,21 @@ class AddFriendController extends GetxController {
 
         chats.doc(newChatDoc.id).collection('chat');
 
+        // Ambil chat terakhir dari subcollection 'chat'
+        String lastMessage = "";
+        final lastChatSnapshot = await chats
+            .doc(newChatDoc.id)
+            .collection("chat")
+            .orderBy("time", descending: true)
+            .limit(1)
+            .get();
+
+        if (lastChatSnapshot.docs.isNotEmpty) {
+          lastMessage = lastChatSnapshot.docs.first["message"];
+        } else {
+          lastMessage = ""; 
+        }
+
         // add collection chats ke collection users
         await users
             .doc(mainC.currentUser!.email)
@@ -138,6 +155,7 @@ class AddFriendController extends GetxController {
           "connection": friendEmail,
           "last_time": date,
           "total_unread": 0,
+          "last_message": lastMessage
         });
 
         // masukkan chat dari collection user ke model UserChat
@@ -151,10 +169,12 @@ class AddFriendController extends GetxController {
             var dataDocChatId = element.id;
             debugPrint(dataDocChat.toString());
             dataListChat.add(ChatUser(
-                connection: dataDocChat["connection"],
-                chatId: dataDocChatId,
-                lastTime: dataDocChat["last_time"],
-                totalUnread: dataDocChat["total_unread"]));
+              connection: dataDocChat["connection"],
+              chatId: dataDocChatId,
+              lastTime: dataDocChat["last_time"],
+              totalUnread: dataDocChat["total_unread"],
+              lastMessage: dataDocChat["last_message"],
+            ));
           }
           mainC.userData.update(
             (val) {

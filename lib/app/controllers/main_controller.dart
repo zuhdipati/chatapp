@@ -69,10 +69,12 @@ class MainController extends GetxController {
               var dataDocChat = element.data();
               var dataDocChatId = element.id;
               dataListChat.add(ChatUser(
-                  connection: dataDocChat["connection"],
-                  chatId: dataDocChatId,
-                  lastTime: dataDocChat["last_time"],
-                  totalUnread: dataDocChat["total_unread"]));
+                connection: dataDocChat["connection"],
+                chatId: dataDocChatId,
+                lastTime: dataDocChat["last_time"],
+                totalUnread: dataDocChat["total_unread"],
+                lastMessage: dataDocChat["last_message"],
+              ));
             }
             userData.update(
               (val) {
@@ -86,7 +88,6 @@ class MainController extends GetxController {
               },
             );
           }
-
         }
       } else {
         log("Pengguna belum login.");
@@ -102,7 +103,6 @@ class MainController extends GetxController {
       await googleSignIn.signOut();
 
       currentUser = await googleSignIn.signIn();
-      
 
       final isSignIn = await googleSignIn.isSignedIn();
       if (isSignIn) {
@@ -151,6 +151,8 @@ class MainController extends GetxController {
         log("GAGAL LOGIN");
       }
     } catch (error) {
+      hideLoading();
+      log("GAGAL LOGIN");
       log(error.toString());
     }
   }

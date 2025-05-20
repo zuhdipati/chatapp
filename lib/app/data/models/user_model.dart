@@ -55,12 +55,14 @@ class ChatUser {
     String chatId;
     String lastTime;
     int totalUnread;
+    String lastMessage;
 
     ChatUser({
         required this.connection,
         required this.chatId,
         required this.lastTime,
         required this.totalUnread,
+        required this.lastMessage,
     });
 
     factory ChatUser.fromJson(Map<String, dynamic> json) => ChatUser(
@@ -68,6 +70,7 @@ class ChatUser {
         chatId: json["chat_id"],
         lastTime: json["last_time"],
         totalUnread: json["total_unread"],
+        lastMessage: json["last_message"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -75,5 +78,6 @@ class ChatUser {
         "chat_id": chatId,
         "last_time": lastTime,
         "total_unread": totalUnread,
+        "last_message": lastMessage,
     };
 }

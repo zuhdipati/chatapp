@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chatapp/app/controllers/main_controller.dart';
 import 'package:chatapp/app/modules/home/chat_room/views/chat_room_view.dart';
 import 'package:chatapp/app/widgets/reactions/chat_reactions.dart';
@@ -10,6 +12,7 @@ import 'package:intl/intl.dart';
 class ChatRoomController extends GetxController {
   var firestore = FirebaseFirestore.instance;
 
+  RxString lastMessage = "".obs;
   RxInt totalUnread = 0.obs;
   List<dynamic> chatReactions = [];
   List<String> listReactions = ['👍', '❤️', '😂', '😮', '😢', '😠'];
@@ -57,6 +60,7 @@ class ChatRoomController extends GetxController {
           .doc(arguments["chat_id"])
           .update({
         "last_time": date,
+        "last_message": chat,
       });
 
       var checkChatsFriend = await users
@@ -64,6 +68,17 @@ class ChatRoomController extends GetxController {
           .collection('chats')
           .doc(arguments["chat_id"])
           .get();
+
+      var lastMessageSnapshot = await chats
+          .doc(arguments["chat_id"])
+          .collection("chat")
+          .orderBy("time", descending: true)
+          .limit(1)
+          .get();
+
+      if (lastMessageSnapshot.docs.isNotEmpty) {
+        lastMessage.value = lastMessageSnapshot.docs.first["message"];
+      }
 
       // jika friend sudah pernah dichat..
       if (checkChatsFriend.exists) {
@@ -83,7 +98,9 @@ class ChatRoomController extends GetxController {
             .update({
           "last_time": date,
           "total_unread": totalUnread.value,
+          "last_message": lastMessage.value,
         });
+        log(lastMessage.value.toString());
       } else {
         // jika friend belum pernah dichat..
         await users
@@ -93,8 +110,10 @@ class ChatRoomController extends GetxController {
             .set({
           "connection": email,
           "last_time": date,
-          "total_unread": totalUnread.value + 1
+          "total_unread": totalUnread.value + 1,
+          "last_message": lastMessage.value
         });
+        log(lastMessage.value.toString());
       }
       chatC.clear();
     }
