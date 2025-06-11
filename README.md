@@ -1,15 +1,15 @@
 # Mengobrol - Chat App
 
-Aplikasi chat real-time yang dibangun dengan Flutter, menggunakan GetX untuk state management, dan Firebase Firestore sebagai backend untuk menyimpan dan mengelola data chat. Aplikasi ini memungkinkan pengguna untuk berkomunikasi secara langsung melalui fitur chat real-time, mencari pengguna lain, dan mengubah profil mereka kapan saja. Aplikasi ini bisa diakses menggunakan Android dan IOS
+A real-time chat application built using **Flutter**, leveraging **GetX** for state management and **Firebase Firestore** as the backend to store and manage chat data. The app enables users to communicate instantly, search for other users, and update their profiles anytime. Available on both **Android** and **iOS**.
 
-## Fitur Utama:
-- Chat Real-Time: Kirim dan terima pesan secara langsung dengan pengguna lain dalam aplikasi.
-- Cari Pengguna: Fitur pencarian untuk menemukan teman atau pengguna lain di aplikasi.
-- Ubah Profil: Pengguna dapat mengubah nama, foto profil, dan informasi lainnya kapan saja.
-- Realtime Updates: Semua perubahan data (pesan, profil) langsung diperbarui secara real-time berkat Firebase Firestore dan GetX.
+## Key Features
+- **Real-Time Chat**: Instantly send and receive messages with other users in the app.
+- **User Search**: Easily search and find friends or other users within the app.
+- **Profile Editing**: Users can update their name, profile picture, and other personal information anytime.
+- **Realtime Updates**: All data changes (messages, profiles) are instantly reflected thanks to Firebase Firestore and GetX.
 
-## Stack Teknologi:
-- Flutter: Framework untuk membangun UI yang responsif dan cepat.
-- GetX: State management yang ringan dan mudah digunakan untuk mengelola status aplikasi dan navigasi.
-- Firebase Firestore: Database NoSQL untuk menyimpan dan mengelola data pengguna dan pesan secara real-time.
-- Firebase Authentication: Otentikasi pengguna dengan Google sign in.
+## Tech Stack
+- **Flutter**: Framework for building fast and responsive UIs across platforms.
+- **GetX**: Lightweight and efficient state management and routing solution.
+- **Firebase Firestore**: Real-time NoSQL database for storing user data and chat messages.
+- **Firebase Authentication**: User authentication with Google Sign-In.
